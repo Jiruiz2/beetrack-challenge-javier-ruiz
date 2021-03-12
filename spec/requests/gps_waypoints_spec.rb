@@ -3,12 +3,20 @@
 require 'rails_helper'
 
 RSpec.describe 'GpsWaypoints', type: :request do
+  before do
+    Timecop.freeze(DateTime.new(2021, 3, 12, 12, 0, 0))
+  end
+
+  after do
+    Timecop.return
+  end
+
   describe 'POST /api/v1/gps' do
     context 'when latitude is missing' do
       let(:waypoint) do
         {
           'longitude' => -0.5,
-          'sent_at' => DateTime.new(2021, 3, 12),  'vehicle_identifier' => 'test'
+          'sent_at' => '2021/3/11 12:00:00',  'vehicle_identifier' => 'test'
         }
       end
 
@@ -25,7 +33,7 @@ RSpec.describe 'GpsWaypoints', type: :request do
       let(:waypoint) do
         {
           'latitude' => 1.5,
-          'sent_at' => DateTime.new(2021, 3, 12),  'vehicle_identifier' => 'test'
+          'sent_at' => '2021/3/11 12:00:00',  'vehicle_identifier' => 'test'
         }
       end
 
@@ -59,7 +67,7 @@ RSpec.describe 'GpsWaypoints', type: :request do
       let(:waypoint) do
         {
           'latitude' => 1.5, 'longitude' => -0.5,
-          'sent_at' => DateTime.new(2021, 3, 12)
+          'sent_at' => '2021/3/11 12:00:00'
         }
       end
 
@@ -96,7 +104,7 @@ RSpec.describe 'GpsWaypoints', type: :request do
       let(:waypoint) do
         {
           'latitude' => 1.5, 'longitude' => -0.5,
-          'sent_at' => DateTime.new(2021, 3, 12),  'vehicle_identifier' => 'test'
+          'sent_at' => '2021/3/11 12:00:00',  'vehicle_identifier' => 'test'
         }
       end
 
