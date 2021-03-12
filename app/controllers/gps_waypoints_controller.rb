@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GpsWaypointsController < ApplicationController
+class GpsWaypointsController < ApiController
   def receive_gps_waypoint
     gps_waypoint = GpsWaypoint.new(gps_waypoint_params)
 
@@ -14,6 +14,12 @@ class GpsWaypointsController < ApplicationController
   private
 
   def gps_waypoint_params
-    params.permit(:latitude, :longitude, :sent_at, :vehicle_identifier)
+    @waypoint_params = params.permit(:latitude, :longitude, :vehicle_identifier)
+    @waypoint_params['sent_at'] = parsed_date
+    @waypoint_params
+  end
+
+  def parsed_date
+    DateTime.parse(params['sent_at'])
   end
 end
