@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -12,13 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_210_310_183_019) do
-  create_table 'gps_waypoints', force: :cascade do |t|
-    t.float 'latitude'
-    t.float 'longitude'
-    t.datetime 'sent_at'
-    t.string 'vehicle_identifier'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
+ActiveRecord::Schema.define(version: 2021_03_12_010938) do
+
+  create_table "gps_waypoints", force: :cascade do |t|
+    t.float "latitude"
+    t.float "longitude"
+    t.datetime "sent_at"
+    t.string "vehicle_identifier"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["vehicle_identifier", "sent_at"], name: "index_gps_waypoints_on_vehicle_identifier_and_sent_at", unique: true
   end
+
 end
