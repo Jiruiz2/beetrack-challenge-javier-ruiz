@@ -7,7 +7,7 @@ class GpsWaypointsController < ApplicationController
     if gps_waypoint.save
       json_response('Tu solicitud ha sido recibida correctamente'.to_json, :created)
     else
-      json_response('Ocurrió un error al procesar tu solicitud'.to_json, :bad_request)
+      json_response(gps_waypoint.errors, :bad_request)
     end
   end
 
