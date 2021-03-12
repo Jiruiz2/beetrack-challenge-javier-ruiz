@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'GpsWaypoints', type: :request do
+RSpec.describe 'GpsWaypointsApi', type: :request do
   before do
     Timecop.freeze(DateTime.new(2021, 3, 12, 12, 0, 0))
   end

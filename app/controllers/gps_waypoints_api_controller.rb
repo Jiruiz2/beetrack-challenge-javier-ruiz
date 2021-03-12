@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class GpsWaypointsController < ApiController
+class GpsWaypointsApiController < ApiController
   def receive_gps_waypoint
     gps_waypoint = GpsWaypoint.new(gps_waypoint_params)
 
