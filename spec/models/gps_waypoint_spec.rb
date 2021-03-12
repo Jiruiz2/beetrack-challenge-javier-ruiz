@@ -9,7 +9,7 @@ RSpec.describe GpsWaypoint, type: :model do
   it { is_expected.to validate_presence_of(:vehicle_identifier) }
 
   context 'when gps waypoint is duplicated' do
-    let(:date) { DateTime.new(2021, 0o3, 11, 12, 0, 0) }
+    let(:date) { DateTime.new(2021, 3, 11, 12, 0, 0) }
     let(:identifier) { 'test' }
     let!(:gps_waypoint) { create(:gps_waypoint, sent_at: date, vehicle_identifier: identifier) }
 
