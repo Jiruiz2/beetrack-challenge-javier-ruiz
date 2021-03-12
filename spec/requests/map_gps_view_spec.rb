@@ -18,8 +18,18 @@ RSpec.describe 'MapGpsView', type: :request do
     it 'render show view' do
       get '/show'
 
+      expect(response).to be_successful
       expect(response).to render_template('show')
       expect(response.body).to match(/#{last_waypoints}/)
+    end
+  end
+
+  describe 'GET /' do
+    it 'render documentation view' do
+      get '/'
+
+      expect(response).to render_template('documentation')
+      expect(response).to be_successful
     end
   end
 end
