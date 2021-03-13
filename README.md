@@ -16,4 +16,6 @@
 * Clear docker space on disk: `docker system prune -a --volumes`
 * Edit credentials: `docker-compose run --rm web rails credentials:edit --environment X`
 * Fix rubocop offences automatically: `docker-compose exec web rubocop -a`
+* Run tests: `docker-compose exec web bundle exec rspec`
+
 
