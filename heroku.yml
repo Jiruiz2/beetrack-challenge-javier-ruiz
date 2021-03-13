@@ -2,4 +2,6 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: bundle exec puma -C config/puma.rb
+  web: - bundle install
+    - yarn install
+    - bundle exec puma -C config/puma.rb
