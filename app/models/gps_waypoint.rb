@@ -7,11 +7,16 @@ class GpsWaypoint < ApplicationRecord
                                                message: 'Gps Waypoint request is duplicated' }
   validate :past_date
 
-  def self.last_waypoints
-    vehicle_identifier_list = GpsWaypoint.distinct.pluck(:vehicle_identifier)
-    vehicle_identifier_list.map do |vehicle_identifier|
-      GpsWaypoint.where(vehicle_identifier: vehicle_identifier).order(sent_at: :desc).first
-    end
+  scope :last_waypoints, -> do
+    from(
+      <<~SQL.squish
+        (
+          SELECT vehicle_identifier, latitude, longitude, max(sent_at) AS sent_at
+          FROM gps_waypoints
+          GROUP BY vehicle_identifier
+        ) gps_waypoints
+      SQL
+    )
   end
 
   private
