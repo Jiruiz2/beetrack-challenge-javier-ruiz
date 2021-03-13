@@ -4,7 +4,12 @@
 
 <script type="text/javascript">
   const waypoints = <%= raw @gps_waypoints %>
-  var mymap = L.map('mapid').setView([waypoints[0][1], waypoints[0][2]], 13);
+  var mymap;
+  if (waypoints.length > 0) {
+    mymap = L.map('mapid').setView([waypoints[0]['latitude'], waypoints[0]['longitude']], 5);
+  } else {
+    mymap = L.map('mapid').setView([-33.4594048, -70.7243994, 5); 
+  }
   
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -15,7 +20,8 @@
       accessToken: '<%= ENV.fetch('LEAFLET_ACCESS_TOKEN') %>'
   }).addTo(mymap);
 
-  waypoints.forEach(element => {
-    L.marker([element[1], element[2]]).addTo(mymap).bindPopup(element[0]);
+  waypoints.forEach(waypoint => {
+    L.marker([waypoint['latitude'], waypoint['longitude']])
+                                .addTo(mymap).bindPopup(waypoint['vehicle_identifier']);
   });
 </script>
