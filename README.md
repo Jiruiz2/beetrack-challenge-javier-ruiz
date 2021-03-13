@@ -8,14 +8,16 @@
 * `docker-compose run --rm web yarn install`
 * `docker-compose run --rm web rails db:create db:schema:load`
 * `docker-compose up -d`
-* Open `localhost:3000` with any browser
+* Abrir `localhost:3000` en cualquier navegador
 
 ### Development tips
 
-* Check new versions of gems: `docker-compose exec web bundle outdated --no-local`
-* Clear docker space on disk: `docker system prune -a --volumes`
-* Edit credentials: `docker-compose run --rm web rails credentials:edit --environment X`
-* Fix rubocop offences automatically: `docker-compose exec web rubocop -a`
-* Run tests: `docker-compose exec web bundle exec rspec`
+* Arreglar las ofensas de rubocop: `docker-compose exec web rubocop -a`
+* Correr tests: `docker-compose exec web bundle exec rspec`
 
-
+### Notas
+- El link de heroku es [https://https://beetrack-challenge-javier-ruiz.herokuapp.com](https://https://beetrack-challenge-javier-ruiz.herokuapp.com)
+- Se separó la API en dos controladores, uno para JSON y uno para HTML por simplicidad de código
+- Se usó JS puro en el HTML para evitar programar de más, pero si se quisiera escalar se podrían crear componentes en Vue.js o React
+- Si no se quiere usar docker se puede hacer con `ruby 2.7.1`
+- Para lo documentación se copió un HTML generado por swagger
