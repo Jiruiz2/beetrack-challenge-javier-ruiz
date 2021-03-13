@@ -21,3 +21,4 @@
 - Se usó JS puro en el HTML para evitar programar de más, pero si se quisiera escalar se podrían crear componentes en Vue.js o React
 - Si no se quiere usar docker se puede hacer con `ruby 2.7.1`
 - Para lo documentación se copió un HTML generado por swagger
+- Dejé un script para probar los post a la api por si lo necesitan `populate_gps_waypoints.rb`
