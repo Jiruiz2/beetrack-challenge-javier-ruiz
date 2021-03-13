@@ -6,9 +6,9 @@
   const waypoints = <%= raw @gps_waypoints %>
   var mymap;
   if (waypoints.length > 0) {
-    mymap = L.map('mapid').setView([waypoints[0]['latitude'], waypoints[0]['longitude']], 5);
+    mymap = L.map('mapid').setView([waypoints[0][1], waypoints[0][2]], 8);
   } else {
-    mymap = L.map('mapid').setView([-33.4594048, -70.7243994], 5); 
+    mymap = L.map('mapid').setView([-33.4594048, -70.7243994], 8); 
   }
   
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -21,7 +21,6 @@
   }).addTo(mymap);
 
   waypoints.forEach(waypoint => {
-    L.marker([waypoint['latitude'], waypoint['longitude']])
-                                .addTo(mymap).bindPopup(waypoint['vehicle_identifier']);
+    L.marker([waypoint[1], waypoint[2]]).addTo(mymap).bindPopup(waypoint[0]);
   });
 </script>
