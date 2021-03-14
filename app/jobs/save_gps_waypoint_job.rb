@@ -3,17 +3,23 @@
 class SaveGpsWaypointJob < ApplicationJob
   queue_as :default
 
-  def perform(params)
-    gps_waypoint = GpsWaypoint.new(params)
-
-    return ['Tu solicitud ha sido recibida correctamente'.to_json, :created] if gps_waypoint.save
-
-    [gps_waypoint.errors.to_json, :bad_request]
+  def perform(gps_waypoint)
+    if sent_at_on_past_date?(gps_waypoint) && !gps_waypoint_duplicated?(gps_waypoint)
+      gps_waypoint.update(status: 'created')
+    else
+      gps_waypoint.update(status: 'bad_request')
+    end
   end
 
   private
 
-  def json_response(object, status)
-    render json: object, status: status
+  def sent_at_on_past_date?(gps_waypoint)
+    gps_waypoint.sent_at < DateTime.now
+  end
+
+  def gps_waypoint_duplicated?(gps_waypoint)
+    duplicated_waypoints = GpsWaypoint.where(vehicle_identifier: gps_waypoint.vehicle_identifier,
+                                             sent_at: gps_waypoint.sent_at, status: 'created')
+    duplicated_waypoints.present?
   end
 end

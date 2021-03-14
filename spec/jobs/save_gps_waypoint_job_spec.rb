@@ -15,122 +15,40 @@ RSpec.describe SaveGpsWaypointJob, type: :job do
     Timecop.return
   end
 
-  describe 'POST /api/v1/gps' do
-    context 'when latitude is missing' do
-      let(:params) do
-        {
-          'longitude' => -0.5,
-          'sent_at' => '2021/3/11 12:00:00',  'vehicle_identifier' => 'test'
-        }
-      end
-      let(:response) { "{\"latitude\":[\"can't be blank\"]}" }
-      let(:status) { :bad_request }
-
-      it 'returns error and bad request status' do
-        expect(perform(params)).to eq([response, status])
-      end
-
-      it 'does not create a GpsWaypoint instance' do
-        expect  { perform(params) }.to change { GpsWaypoint.count }.by(0)
-      end
+  context 'when gps waypoint is duplicated' do
+    let(:date) { DateTime.new(2021, 3, 10) }
+    let(:identifier) { 'test' }
+    let!(:gps_waypoint1) do
+      create(:gps_waypoint, sent_at: date, vehicle_identifier: identifier,
+                            status: 'created')
     end
+    let!(:gps_waypoint2) { create(:gps_waypoint, sent_at: date, vehicle_identifier: identifier) }
 
-    context 'when longitude is missing' do
-      let(:params) do
-        {
-          'latitude' => 1.5,
-          'sent_at' => '2021/3/11 12:00:00',  'vehicle_identifier' => 'test'
-        }
-      end
-      let(:response) { "{\"longitude\":[\"can't be blank\"]}" }
-      let(:status) { :bad_request }
-
-      it 'returns error and bad request status' do
-        expect(perform(params)).to eq([response, status])
-      end
-
-      it 'does not create a GpsWaypoint instance' do
-        expect  { perform(params) }.to change { GpsWaypoint.count }.by(0)
-      end
+    it 'changes status to bad_request' do
+      expect { perform(gps_waypoint2) }.to change { gps_waypoint2.status }.from('pending')
+                                                                          .to('bad_request')
     end
+  end
 
-    context 'when sent_at is missing' do
-      let(:params) do
-        {
-          'latitude' => 1.5, 'longitude' => -0.5,
-          'vehicle_identifier' => 'test'
-        }
-      end
-      let(:response) { "{\"sent_at\":[\"can't be blank\"]}" }
-      let(:status) { :bad_request }
+  context 'when sent_date is on the future' do
+    let(:date) { DateTime.new(2021, 3, 20) }
+    let(:identifier) { 'test' }
+    let!(:gps_waypoint) { create(:gps_waypoint, sent_at: date, vehicle_identifier: identifier) }
 
-      it 'returns error and bad request status' do
-        expect(perform(params)).to eq([response, status])
-      end
-
-      it 'does not create a GpsWaypoint instance' do
-        expect  { perform(params) }.to change { GpsWaypoint.count }.by(0)
-      end
+    it 'changes status to bad_request' do
+      expect { perform(gps_waypoint) }.to change { gps_waypoint.status }.from('pending')
+                                                                        .to('bad_request')
     end
+  end
 
-    context 'when vehicle_identifier is missing' do
-      let(:params) do
-        {
-          'latitude' => 1.5, 'longitude' => -0.5,
-          'sent_at' => '2021/3/11 12:00:00'
-        }
-      end
-      let(:response) { "{\"vehicle_identifier\":[\"can't be blank\"]}" }
-      let(:status) { :bad_request }
+  context 'when request is correct' do
+    let(:date) { DateTime.new(2021, 3, 10) }
+    let(:identifier) { 'test' }
+    let!(:gps_waypoint) { create(:gps_waypoint, sent_at: date, vehicle_identifier: identifier) }
 
-      it 'returns error and bad request status' do
-        expect(perform(params)).to eq([response, status])
-      end
-
-      it 'does not create a GpsWaypoint instance' do
-        expect  { perform(params) }.to change { GpsWaypoint.count }.by(0)
-      end
-    end
-
-    context 'when gps waypoint is duplicated' do
-      let(:date) { DateTime.new(2021, 3, 11, 12, 0, 0) }
-      let(:identifier) { 'test' }
-      let!(:gps_waypoint) { create(:gps_waypoint, sent_at: date, vehicle_identifier: identifier) }
-      let(:params) do
-        {
-          'latitude' => 1.5, 'longitude' => -0.5,
-          'sent_at' => date,  'vehicle_identifier' => identifier
-        }
-      end
-      let(:response) { "{\"vehicle_identifier\":[\"Gps Waypoint request is duplicated\"]}" }
-      let(:status) { :bad_request }
-
-      it 'returns error and bad request status' do
-        expect(perform(params)).to eq([response, status])
-      end
-
-      it 'does not create a GpsWaypoint instance' do
-        expect  { perform(params) }.to change { GpsWaypoint.count }.by(0)
-      end
-    end
-
-    context 'when request is correct' do
-      let(:params) do
-        {
-          'latitude' => 1.5, 'longitude' => -0.5,
-          'sent_at' => '2021/3/11 12:00:00',  'vehicle_identifier' => 'test'
-        }
-      end
-      let(:response) { 'Tu solicitud ha sido recibida correctamente'.to_json }
-      let(:status) { :created }
-
-      it 'returns successful message and created status' do
-        expect(perform(params)).to eq([response, status])
-      end
-
-      it 'does create a GpsWaypoint instance' do
-        expect { perform(params) }.to change { GpsWaypoint.count }.by(1)
-      end
+    it 'changes status to created' do
+      expect { perform(gps_waypoint) }.to change { gps_waypoint.status }.from('pending')
+                                                                        .to('created')
     end
   end
 end
