@@ -18,6 +18,7 @@
 .rubocop-http*
 .env.local
 .env
+tmp/
 
 vendor/assets/bower_components
 .idea/*
