@@ -20,8 +20,7 @@ ActiveRecord::Schema.define(version: 2021_03_14_190823) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "status", default: "pending"
-    t.string "digest_identifier"
-    t.index ["vehicle_identifier", "sent_at"], name: "index_gps_waypoints_on_vehicle_identifier_and_sent_at", unique: true
+    t.string "request_identifier"
   end
 
 end
