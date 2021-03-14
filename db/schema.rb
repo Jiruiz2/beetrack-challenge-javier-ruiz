@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_12_010938) do
+ActiveRecord::Schema.define(version: 2021_03_14_190823) do
 
   create_table "gps_waypoints", force: :cascade do |t|
     t.float "latitude"
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 2021_03_12_010938) do
     t.string "vehicle_identifier"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "status", default: "pending"
+    t.string "digest_identifier"
     t.index ["vehicle_identifier", "sent_at"], name: "index_gps_waypoints_on_vehicle_identifier_and_sent_at", unique: true
   end
 
