@@ -2,13 +2,8 @@
 
 class GpsWaypointsApiController < ApiController
   def receive_gps_waypoint
-    gps_waypoint = GpsWaypoint.new(gps_waypoint_params)
-
-    if gps_waypoint.save
-      json_response('Tu solicitud ha sido recibida correctamente'.to_json, :created)
-    else
-      json_response(gps_waypoint.errors, :bad_request)
-    end
+    response, status = SaveGpsWaypointJob.perform_now(gps_waypoint_params)
+    json_response(response, status)
   end
 
   private
