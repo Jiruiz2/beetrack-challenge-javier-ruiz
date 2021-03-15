@@ -11,6 +11,7 @@ class GpsWaypoint < ApplicationRecord
           SELECT vehicle_identifier, latitude, longitude, max(sent_at) AS sent_at
           FROM gps_waypoints
           GROUP BY vehicle_identifier
+          HAVING status='created'
         ) gps_waypoints
       SQL
     )

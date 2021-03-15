@@ -7,12 +7,31 @@ RSpec.describe 'MapGpsView', type: :request do
     "[\"#{gps_waypoint.vehicle_identifier}\", #{gps_waypoint.latitude}, #{gps_waypoint.longitude}]"
   end
 
+  before do
+    Timecop.freeze(DateTime.new(2021, 3, 12, 12, 0, 0))
+  end
+
+  after do
+    Timecop.return
+  end
+
+  let(:date) { DateTime.new(2021, 3, 10, 12, 0, 0) }
+  let(:future_date) { DateTime.new(2021, 3, 11, 12, 0, 0) }
+
   describe 'GET /show' do
-    let!(:gps_waypoint1) { create(:gps_waypoint) }
-    let!(:gps_waypoint2) { create(:gps_waypoint) }
-    let!(:gps_waypoint3) { create(:gps_waypoint) }
+    let!(:gps_waypoint1) do
+      create(:gps_waypoint, sent_at: date, vehicle_identifier: 'test', status: 'created')
+    end
+    let!(:gps_waypoint2) do
+      create(:gps_waypoint, sent_at: future_date, vehicle_identifier: 'test', status: 'pending')
+    end
+    let!(:gps_waypoint3) do
+      create(:gps_waypoint, sent_at: future_date, vehicle_identifier: 'test', status: 'bad_request')
+    end
+    let!(:gps_waypoint4) { create(:gps_waypoint, sent_at: date, status: 'created') }
+
     let(:last_waypoints) do "[#{gps_waypoint_information(gps_waypoint1)}, "\
-    "#{gps_waypoint_information(gps_waypoint2)}, #{gps_waypoint_information(gps_waypoint3)}]"
+    "#{gps_waypoint_information(gps_waypoint4)}]"
     end
 
     it 'render show view' do
