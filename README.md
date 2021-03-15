@@ -16,6 +16,12 @@
   5. `rails s`
 * Abrir `localhost:3000` en cualquier navegador
 
+### Environment Variables
+
+| Nombre | Valor |
+| -------- | -------- |
+| LEAFLET_ACCESS_TOKEN     | pk.eyJ1IjoiamlydWl6MiIsImEiOiJjandoNzd2djIyYWltNDFxbnZ2MWY1cm00In0.x0jDfuNjtcUEGG8FSGsLDw |
+
 ### Development tips
 
 * Arreglar las ofensas de rubocop: `docker-compose exec web rubocop -a`
