@@ -18,12 +18,33 @@ RSpec.describe 'GpsWaypointsApi', type: :request do
         'sent_at' => '2021/3/11 12:00:00',  'vehicle_identifier' => 'test'
       }
     end
-    let(:response_message) { "\"Tu solicitud ha sido recibida correctamente\"" }
+    let(:request_id) { 'test'.to_json }
 
-    it 'render json response and has created status' do
+    before do
+      allow_any_instance_of(ReceiveGpsWaypoint).to receive(:perform).and_return('test')
+    end
+
+    it 'render json response and has ok status' do
       post '/api/v1/gps', params: params
 
-      expect(response.body).to eq(response_message)
+      expect(response.body).to eq(request_id)
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe 'GET /api/v1/gps_status' do
+    let(:params) { 'request_id=test' }
+
+    before do
+      allow_any_instance_of(GetGpsWaypointRequestStatus).to receive(:perform).and_return(
+        ['ok', :created]
+      )
+    end
+
+    it 'render json response and has ok status' do
+      get "/api/v1/gps_status?#{params}"
+
+      expect(response.body).to eq('ok'.to_json)
       expect(response).to have_http_status(:created)
     end
   end
