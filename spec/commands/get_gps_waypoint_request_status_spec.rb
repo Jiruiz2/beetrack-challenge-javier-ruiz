@@ -37,4 +37,12 @@ describe GetGpsWaypointRequestStatus do
       expect(perform(request_id)).to eq([bad_request_message, :bad_request])
     end
   end
+
+  context 'when does not exist a gps_waypoint for request_id' do
+    let(:bad_request_message) { 'El request_id no es válido' }
+
+    it 'returns bad_request message and status' do
+      expect(perform(request_id)).to eq([bad_request_message, :bad_request])
+    end
+  end
 end

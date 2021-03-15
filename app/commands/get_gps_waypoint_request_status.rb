@@ -10,5 +10,7 @@ class GetGpsWaypointRequestStatus < PowerTypes::Command.new(:request_id)
 
     ['La fecha ingresada es en el futuro o ya existe la combinación de'\
      ' sent_at y vehicle_identifier', :bad_request]
+  rescue NoMethodError
+    ['El request_id no es válido', :bad_request]
   end
 end
